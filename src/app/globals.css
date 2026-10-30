@@ -1,0 +1,396 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #fff9f2;
+  --color-cream-deep: #f7ecdd;
+  --color-blush: #f6dce4;
+  --color-blush-deep: #e9a9bd;
+  --color-rosewood: #c9718c;
+  --color-lavender: #e8e0f4;
+  --color-lavender-deep: #b7a5d9;
+  --color-sage: #c9d7c0;
+  --color-sage-deep: #8fa886;
+  --color-butter: #f7e8a6;
+  --color-butter-deep: #e6c85f;
+  --color-cocoa: #59453f;
+  --color-cocoa-soft: #8a746c;
+  --color-paper: #fffdf9;
+
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-nunito), ui-rounded, system-ui, sans-serif;
+  --font-hand: var(--font-caveat), "Segoe Print", cursive;
+
+  --shadow-soft: 0 10px 30px -12px rgb(89 69 63 / 0.25), 0 2px 6px -2px rgb(89 69 63 / 0.08);
+  --shadow-float: 0 24px 50px -20px rgb(89 69 63 / 0.35), 0 6px 14px -6px rgb(89 69 63 / 0.12);
+  --shadow-press: 0 2px 0 0 rgb(89 69 63 / 0.18);
+
+  --ease-bouncy: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html,
+body {
+  background: var(--color-cream);
+  color: var(--color-cocoa);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  overscroll-behavior-y: none;
+}
+
+/* Paper grain over the whole app */
+.paper-grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.45 0 0 0 0 0.4 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background: var(--color-blush);
+  color: var(--color-cocoa);
+}
+
+:focus-visible {
+  outline: 2.5px dashed var(--color-rosewood);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+/* Hide scrollbars on horizontal trays while keeping them scrollable */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.soft-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #e3d2c4 transparent;
+}
+
+/* Range sliders in the studio */
+.bloom-range {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.bloom-range::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-rosewood) var(--fill, 50%), #eadfd6 var(--fill, 50%));
+}
+.bloom-range::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-rosewood) var(--fill, 50%), #eadfd6 var(--fill, 50%));
+}
+.bloom-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -8px;
+  height: 24px;
+  width: 24px;
+  border-radius: 999px;
+  background: #fffdf9;
+  border: 3px solid var(--color-rosewood);
+  box-shadow: 0 2px 6px rgb(89 69 63 / 0.25);
+}
+.bloom-range::-moz-range-thumb {
+  height: 18px;
+  width: 18px;
+  border-radius: 999px;
+  background: #fffdf9;
+  border: 3px solid var(--color-rosewood);
+  box-shadow: 0 2px 6px rgb(89 69 63 / 0.25);
+}
+
+/* ---------- keyframes ---------- */
+
+@keyframes petal-fall {
+  0% {
+    transform: translate3d(0, -12vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: var(--petal-opacity, 0.85);
+  }
+  92% {
+    opacity: var(--petal-opacity, 0.85);
+  }
+  100% {
+    transform: translate3d(var(--petal-drift, 60px), 112vh, 0) rotate(var(--petal-spin, 540deg));
+    opacity: 0;
+  }
+}
+
+@keyframes petal-sway {
+  0%,
+  100% {
+    transform: translateX(-14px) rotateY(0deg);
+  }
+  50% {
+    transform: translateX(14px) rotateY(160deg);
+  }
+}
+
+@keyframes bloom-in {
+  0% {
+    transform: scale(0.15) rotate(-24deg);
+    opacity: 0;
+  }
+  55% {
+    transform: scale(1.08) rotate(4deg);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(0.97) rotate(-1deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes gentle-sway {
+  0%,
+  100% {
+    transform: rotate(-1.1deg);
+  }
+  50% {
+    transform: rotate(1.1deg);
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: scale(0.55) rotate(0deg);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1) rotate(45deg);
+    opacity: 1;
+  }
+}
+
+@keyframes float-heart {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-6deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(6deg);
+  }
+}
+
+@keyframes tail-sway {
+  0%,
+  100% {
+    transform: rotate(-2.5deg);
+  }
+  50% {
+    transform: rotate(2.5deg);
+  }
+}
+
+@keyframes ribbon-draw {
+  from {
+    stroke-dashoffset: var(--len, 400);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-bloom-in {
+  animation: bloom-in 0.62s var(--ease-soft) both;
+}
+.animate-gentle-sway {
+  animation: gentle-sway 5.5s ease-in-out infinite;
+  transform-origin: 50% 85%;
+}
+.animate-bob {
+  animation: bob 3.6s ease-in-out infinite;
+}
+
+/* ---------- ribbon tie animation (SVG user-space origins) ---------- */
+.ribbon .rb-band {
+  transform-origin: 500px 884px;
+  animation: rb-band 0.5s var(--ease-soft) both;
+}
+.ribbon .rb-knot {
+  transform-origin: 500px 884px;
+  animation: pop-in 0.45s 0.18s var(--ease-bouncy) both;
+}
+.ribbon .rb-loop-l {
+  transform-origin: 500px 884px;
+  animation: rb-loop-l 0.75s 0.22s var(--ease-bouncy) both;
+}
+.ribbon .rb-loop-r {
+  transform-origin: 500px 884px;
+  animation: rb-loop-r 0.75s 0.32s var(--ease-bouncy) both;
+}
+.ribbon .rb-tail-l {
+  transform-origin: 499px 892px;
+  animation:
+    rb-tail 0.6s 0.45s var(--ease-soft) both,
+    tail-sway 4.6s 1.2s ease-in-out infinite;
+}
+.ribbon .rb-tail-r {
+  transform-origin: 501px 892px;
+  animation:
+    rb-tail 0.6s 0.55s var(--ease-soft) both,
+    tail-sway 5.2s 1.4s ease-in-out infinite reverse;
+}
+.ribbon.rb-static * {
+  animation: none !important;
+}
+
+@keyframes rb-band {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+@keyframes rb-loop-l {
+  from {
+    transform: scale(0) rotate(50deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+@keyframes rb-loop-r {
+  from {
+    transform: scale(0) rotate(-50deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+@keyframes rb-tail {
+  from {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes burst {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3) rotate(0deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--bx)), calc(-50% + var(--by) + 140px)) scale(1) rotate(var(--br));
+    opacity: 0;
+  }
+}
+@keyframes tag-swing {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+
+.deco-heart {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: float-heart 4.2s ease-in-out infinite;
+}
+.deco-spark {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: twinkle 2.4s ease-in-out infinite;
+}
+.deco-tag {
+  transform-origin: 18px 0px;
+  animation: tag-swing 5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
